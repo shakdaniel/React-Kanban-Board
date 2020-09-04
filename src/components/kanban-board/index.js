@@ -59,9 +59,33 @@ export default class KanbanBoard extends Component {
       });
     };
 
-    const incrementTask = (name) => {};
+    const incrementTask = (name) => {
+      let newTasks = [...this.state.tasks];
+      const taskIndex = this.state.tasks.findIndex(
+        (task) => task.name === name
+      );
+      newTasks[taskIndex] = {
+        ...newTasks[taskIndex],
+        stage: newTasks[taskIndex].stage + 1,
+      };
+      this.setState({
+        tasks: newTasks,
+      });
+    };
 
-    const decrementTask = (name) => {};
+    const decrementTask = (name) => {
+      let newTasks = [...this.state.tasks];
+      const taskIndex = this.state.tasks.findIndex(
+        (task) => task.name === name
+      );
+      newTasks[taskIndex] = {
+        ...newTasks[taskIndex],
+        stage: newTasks[taskIndex].stage - 1,
+      };
+      this.setState({
+        tasks: newTasks,
+      });
+    };
 
     return (
       <div className="mt-20 layout-column justify-content-center align-items-center">
@@ -106,24 +130,51 @@ export default class KanbanBoard extends Component {
                               {task.name}
                             </span>
                             <div className="icons">
-                              <button
-                                className="icon-only x-small mx-2"
-                                data-testid={`${task.name
-                                  .split(" ")
-                                  .join("-")}-back`}
-                                onClick={() => decrementTask(task.name)}
-                              >
-                                <i className="material-icons">arrow_back</i>
-                              </button>
-                              <button
-                                className="icon-only x-small mx-2"
-                                data-testid={`${task.name
-                                  .split(" ")
-                                  .join("-")}-forward`}
-                                onClick={() => incrementTask(task.name)}
-                              >
-                                <i className="material-icons">arrow_forward</i>
-                              </button>
+                              {task.stage === 0 ? (
+                                <button
+                                  className="icon-only disabled x-small mx-2"
+                                  data-testid={`${task.name
+                                    .split(" ")
+                                    .join("-")}-back`}
+                                >
+                                  <i className="material-icons">arrow_back</i>
+                                </button>
+                              ) : (
+                                <button
+                                  className="icon-only x-small mx-2"
+                                  data-testid={`${task.name
+                                    .split(" ")
+                                    .join("-")}-back`}
+                                  onClick={() => decrementTask(task.name)}
+                                >
+                                  <i className="material-icons">arrow_back</i>
+                                </button>
+                              )}
+                              {task.stage === 3 ? (
+                                <button
+                                  className="icon-only disabled x-small mx-2"
+                                  data-testid={`${task.name
+                                    .split(" ")
+                                    .join("-")}-forward`}
+                                >
+                                  <i className="material-icons">
+                                    arrow_forward
+                                  </i>
+                                </button>
+                              ) : (
+                                <button
+                                  className="icon-only x-small mx-2"
+                                  data-testid={`${task.name
+                                    .split(" ")
+                                    .join("-")}-forward`}
+                                  onClick={() => incrementTask(task.name)}
+                                >
+                                  <i className="material-icons">
+                                    arrow_forward
+                                  </i>
+                                </button>
+                              )}
+
                               <button
                                 className="icon-only danger x-small mx-2"
                                 data-testid={`${task.name
